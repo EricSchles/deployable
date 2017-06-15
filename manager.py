@@ -1,3 +1,3 @@
-from application import manager
+from app import manager
 
 manager.run()
