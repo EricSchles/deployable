@@ -7,6 +7,8 @@ from flask import request #this is better
 #this should not accept both get and post
 @app.route("/pull", methods=["GET","POST"])
 def pull(): #not exactly
+    #Table.query.filter_by(branchname=branchname).all()
+    #Table.query.filter_by(increment=increment).filter_by(branchname=branchname).all()
     results = [elem.row for elem in Table.query.all()]
     return json.dumps(results)
 
