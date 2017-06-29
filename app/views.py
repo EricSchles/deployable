@@ -1,23 +1,22 @@
 from app import app
-from app.models import Table
+from app.models import Code
 import json
 from app import db
 from flask import request #this is better
 
 #this should not accept both get and post
 @app.route("/pull", methods=["GET","POST"])
-def pull(): #not exactly
-    #Table.query.filter_by(branchname=branchname).all()
-    #Table.query.filter_by(increment=increment).filter_by(branchname=branchname).all()
-    results = [elem.row for elem in Table.query.all()]
-    return json.dumps(results)
+def pull():
+    all_code_versions = Code.query.all()
+    all_code_versions = sorted(all_code_versions, key=lambda x: x.id)
+    result = all_code_versions[-1]
+    return json.dumps({"code":result.code, "id":result.id})
 
-#this might work?
-#request is better
+
 @app.route("/push", methods=["GET","POST"]) #this should not accept both get and post
 def push():
     code = json.loads(request.get_data())
-    table = Table(code["code"])
-    db.session.add(table)
+    code_obj = Code(code["code"])
+    db.session.add(code_obj)
     db.session.commit()
     return "success!"
